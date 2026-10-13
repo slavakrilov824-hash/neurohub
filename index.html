@@ -1,35 +1,45 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101114"><meta name="description" content="NeuroHub — единый чат для разных ИИ-моделей с вашими API-ключами.">
-<title>NeuroHub — AI Chat</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https: http://localhost:* http://127.0.0.1:* http://[::1]:*; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="dark light">
+<title>Хор — много нейросетей в одном чате</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E✦%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><span class="brand-mark">✳</span><span>neuro<span class="accent">hub</span></span><button class="icon-btn mobile-close" id="closeSidebar" aria-label="Закрыть меню">×</button></div>
-    <button class="new-chat" id="newChat">＋ <span>Новый чат</span></button>
-    <div class="side-label">ИСТОРИЯ</div><div id="chatList" class="chat-list"></div>
-    <div class="sidebar-bottom"><div class="privacy-note"><span class="green-dot"></span><span>Ключи хранятся только в этом браузере</span></div><button class="settings-link" id="openSettings">⚙ Настройки API</button><a class="settings-link" href="README.md" target="_blank" rel="noreferrer">ⓘ Как пользоваться</a></div>
-  </aside>
-  <main class="main">
-    <header class="topbar"><button class="icon-btn menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button><div class="top-title">Рабочее пространство <span class="top-sub">/ Личный AI-чат</span></div><button class="settings-top" id="openSettingsTop">⚙ <span>Подключить модели</span></button></header>
-    <section class="conversation" id="conversation">
-      <div class="welcome" id="welcome"><div class="welcome-icon">✳</div><div class="eyebrow">ВАШЕ ПРОСТРАНСТВО ИИ</div><h1>О чём поговорим<br><span class="muted">сегодня?</span></h1><p>Выберите модель, задайте вопрос и начните диалог.<br>Подключите OpenRouter и выберите бесплатную модель или добавьте собственный API-ключ.</p>
-        <div class="suggestions"><button class="suggestion" data-prompt="Объясни сложную тему простыми словами и приведи пример."><span>✦</span><b>Объяснить тему</b><small>Понятно и по шагам</small></button><button class="suggestion" data-prompt="Помоги написать чистый, понятный код и объясни решение."><span>⌘</span><b>Написать код</b><small>Разработка и отладка</small></button><button class="suggestion" data-prompt="Предложи 5 необычных идей для небольшого проекта."><span>✧</span><b>Найти идеи</b><small>Вдохновение и варианты</small></button></div>
-      </div><div class="messages" id="messages" aria-live="polite"></div>
-    </section>
-    <footer class="composer-wrap"><div class="composer"><textarea id="prompt" rows="1" placeholder="Напишите сообщение..." aria-label="Сообщение"></textarea><div class="composer-bottom"><div class="model-select-wrap"><span class="model-dot"></span><select id="modelSelect" aria-label="Модель"><option value="openrouter:openrouter/free">Бесплатные модели · OpenRouter</option><option value="deepseek:deepseek-chat">DeepSeek API · ключ</option><option value="openai:gpt-4o-mini">ChatGPT API · ключ</option><option value="anthropic:claude-3-5-haiku-latest">Claude API · ключ</option><option value="yandex:yandexgpt-lite">Яндекс GPT / Алиса · ключ</option><option value="custom:">Другая OpenAI-совместимая модель</option></select></div><div class="send-tools"><span class="hint" id="status">Ответы генерируются через API</span><button class="send-btn" id="sendBtn" aria-label="Отправить сообщение">↑</button></div></div></div><div class="disclaimer">Проверяйте важную информацию. Использование API может иметь лимиты или стоимость в зависимости от вашего тарифа.</div></footer>
-  </main>
-</div>
-<div class="modal-backdrop" id="settingsModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><div class="eyebrow">ПОДКЛЮЧЕНИЕ</div><h2 id="modalTitle">Настройки моделей</h2></div><button class="icon-btn" id="closeSettings" aria-label="Закрыть">×</button></div><p class="modal-intro">Добавьте собственные ключи API. Они сохраняются только в localStorage этого браузера и не отправляются на сервер NeuroHub. Не вводите ключ на чужом устройстве.</p>
-<div class="provider"><div class="provider-head"><div><b>DeepSeek</b><small>API обычно платный; бесплатный чат на сайте DeepSeek — отдельно</small></div><a href="https://platform.deepseek.com/" target="_blank" rel="noreferrer">Получить ключ ↗</a></div><label for="deepseekKey">API-ключ</label><input id="deepseekKey" type="password" placeholder="Ключ DeepSeek" autocomplete="off"><label for="deepseekModel">Модель API</label><input id="deepseekModel" value="deepseek-chat" autocomplete="off"></div>
-<div class="provider"><div class="provider-head"><div><b>ChatGPT / OpenAI API</b><small>API оплачивается отдельно от ChatGPT; бесплатность не гарантируется</small></div><a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer">Получить ключ ↗</a></div><label for="openaiKey">API-ключ</label><input id="openaiKey" type="password" placeholder="sk-…" autocomplete="off"><label for="openaiModel">Модель API</label><input id="openaiModel" value="gpt-4o-mini" autocomplete="off"></div>
-<div class="provider"><div class="provider-head"><div><b>YandexGPT / Алиса</b><small>Через Yandex Cloud API; условия бесплатного доступа зависят от аккаунта</small></div><a href="https://console.yandex.cloud/" target="_blank" rel="noreferrer">Yandex Cloud ↗</a></div><label for="yandexKey">API-ключ сервисного аккаунта</label><input id="yandexKey" type="password" placeholder="API key" autocomplete="off"><label for="yandexFolder">Folder ID</label><input id="yandexFolder" placeholder="b1g..." autocomplete="off"><label for="yandexModel">Модель</label><input id="yandexModel" value="yandexgpt-lite" autocomplete="off"></div>
-<div class="provider"><div class="provider-head"><div><b>OpenRouter</b><small>В том числе модели с бесплатным доступом</small></div><a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer">Получить ключ ↗</a></div><label for="openrouterKey">API-ключ</label><input id="openrouterKey" type="password" placeholder="sk-or-…" autocomplete="off"><label for="openrouterModel">ID модели</label><input id="openrouterModel" value="openrouter/free" autocomplete="off"></div>
-<div class="provider"><div class="provider-head"><div><b>Anthropic Claude</b><small>API обычно требует оплачиваемый доступ/кредиты</small></div><a href="https://console.anthropic.com/" target="_blank" rel="noreferrer">Консоль ↗</a></div><label for="anthropicKey">API-ключ</label><input id="anthropicKey" type="password" placeholder="sk-ant-…" autocomplete="off"><label for="anthropicModel">Модель</label><input id="anthropicModel" value="claude-3-5-haiku-latest" autocomplete="off"></div>
-<div class="provider"><div class="provider-head"><div><b>Своя OpenAI-совместимая модель</b><small>Для совместимых API-провайдеров</small></div></div><label for="customBase">Базовый URL</label><input id="customBase" placeholder="https://api.example.com/v1" autocomplete="off"><label for="customKey">API-ключ</label><input id="customKey" type="password" placeholder="Ключ API" autocomplete="off"><label for="customModel">ID модели</label><input id="customModel" placeholder="model-id" autocomplete="off"></div>
-<div class="modal-actions"><button class="secondary-btn" id="clearKeys">Удалить ключи</button><button class="primary-btn" id="saveSettings">Сохранить настройки</button></div><div class="save-status" id="saveStatus" role="status"></div></section></div>
-<script src="app.js"></script>
-</body></html>
+<div class="backdrop" id="backdrop"></div>
+<aside class="sidebar" id="sidebar" aria-label="История диалогов">
+  <div class="brand">Хор</div>
+  <button class="primary wide" id="newChat" type="button">Новый чат</button>
+  <input id="search" type="search" placeholder="Поиск по истории (Ctrl+K)" aria-label="Поиск по истории">
+  <nav class="chats" id="chatList"></nav>
+  <button class="ghost wide" id="openSettings" type="button">Настройки и ключи</button>
+</aside>
+<main class="main">
+  <header class="top">
+    <button class="icon only-mobile" id="menu" type="button" aria-label="Открыть меню">☰</button>
+    <label class="sr" for="provider">Провайдер</label>
+    <select id="provider"></select>
+    <label class="sr" for="model">Модель</label>
+    <input id="model" list="modelList" placeholder="ID модели" autocomplete="off" spellcheck="false">
+    <datalist id="modelList"></datalist>
+    <button class="icon" id="refreshModels" type="button" title="Обновить список моделей" aria-label="Обновить список моделей">⟳</button>
+    <label class="check" id="freeWrap"><input type="checkbox" id="freeOnly"> только бесплатные</label>
+    <span class="badge" id="accessBadge"></span>
+    <button class="icon" id="openInfo" type="button" title="Лимиты и доступ" aria-label="Лимиты и тип доступа">ⓘ</button>
+  </header>
+  <section class="messages" id="messages" aria-live="polite"></section>
+  <footer class="composer">
+    <textarea id="input" rows="1" placeholder="Напишите сообщение. Enter — отправить, Shift+Enter — новая строка" aria-label="Сообщение"></textarea>
+    <button class="primary" id="send" type="button">Отправить</button>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+</main>
+<dialog id="settingsDlg"></dialog>
+<dialog id="infoDlg"></dialog>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

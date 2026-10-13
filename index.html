@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114"><meta name="description" content="NeuroHub — единый чат для разных ИИ-моделей с вашими API-ключами.">
+<title>NeuroHub — AI Chat</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">✳</span><span>neuro<span class="accent">hub</span></span><button class="icon-btn mobile-close" id="closeSidebar" aria-label="Закрыть меню">×</button></div>
+    <button class="new-chat" id="newChat">＋ <span>Новый чат</span></button>
+    <div class="side-label">ИСТОРИЯ</div><div id="chatList" class="chat-list"></div>
+    <div class="sidebar-bottom"><div class="privacy-note"><span class="green-dot"></span><span>Ключи хранятся только в этом браузере</span></div><button class="settings-link" id="openSettings">⚙ Настройки API</button><a class="settings-link" href="README.md" target="_blank" rel="noreferrer">ⓘ Как пользоваться</a></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><button class="icon-btn menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button><div class="top-title">Рабочее пространство <span class="top-sub">/ Личный AI-чат</span></div><button class="settings-top" id="openSettingsTop">⚙ <span>Подключить модели</span></button></header>
+    <section class="conversation" id="conversation">
+      <div class="welcome" id="welcome"><div class="welcome-icon">✳</div><div class="eyebrow">ВАШЕ ПРОСТРАНСТВО ИИ</div><h1>О чём поговорим<br><span class="muted">сегодня?</span></h1><p>Выберите модель, задайте вопрос и начните диалог.<br>Подключите API-ключи в настройках, чтобы общаться с ИИ.</p>
+        <div class="suggestions"><button class="suggestion" data-prompt="Объясни сложную тему простыми словами и приведи пример."><span>✦</span><b>Объяснить тему</b><small>Понятно и по шагам</small></button><button class="suggestion" data-prompt="Помоги написать чистый, понятный код и объясни решение."><span>⌘</span><b>Написать код</b><small>Разработка и отладка</small></button><button class="suggestion" data-prompt="Предложи 5 необычных идей для небольшого проекта."><span>✧</span><b>Найти идеи</b><small>Вдохновение и варианты</small></button></div>
+      </div><div class="messages" id="messages" aria-live="polite"></div>
+    </section>
+    <footer class="composer-wrap"><div class="composer"><textarea id="prompt" rows="1" placeholder="Напишите сообщение..." aria-label="Сообщение"></textarea><div class="composer-bottom"><div class="model-select-wrap"><span class="model-dot"></span><select id="modelSelect" aria-label="Модель"><option value="gemini:gemini-2.5-flash">Gemini 2.5 Flash · подключить ключ</option><option value="openrouter:openrouter/free">OpenRouter Free · подключить ключ</option><option value="anthropic:claude-3-5-haiku-latest">Claude · подключить ключ</option><option value="custom:">Своя модель · настройки</option></select></div><div class="send-tools"><span class="hint" id="status">Ответы генерируются через API</span><button class="send-btn" id="sendBtn" aria-label="Отправить сообщение">↑</button></div></div></div><div class="disclaimer">Проверяйте важную информацию. Использование API может иметь лимиты или стоимость в зависимости от вашего тарифа.</div></footer>
+  </main>
+</div>
+<div class="modal-backdrop" id="settingsModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><div class="eyebrow">ПОДКЛЮЧЕНИЕ</div><h2 id="modalTitle">Настройки моделей</h2></div><button class="icon-btn" id="closeSettings" aria-label="Закрыть">×</button></div><p class="modal-intro">Добавьте собственные ключи API. Они сохраняются только в localStorage этого браузера и не отправляются на сервер NeuroHub. Не вводите ключ на чужом устройстве.</p>
+<div class="provider"><div class="provider-head"><div><b>Google Gemini</b><small>Есть бесплатный тариф с ограничениями</small></div><a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Получить ключ ↗</a></div><label for="geminiKey">API-ключ</label><input id="geminiKey" type="password" placeholder="AIza…" autocomplete="off"><label for="geminiModel">Модель</label><input id="geminiModel" value="gemini-2.5-flash" autocomplete="off"></div>
+<div class="provider"><div class="provider-head"><div><b>OpenRouter</b><small>В том числе модели с бесплатным доступом</small></div><a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer">Получить ключ ↗</a></div><label for="openrouterKey">API-ключ</label><input id="openrouterKey" type="password" placeholder="sk-or-…" autocomplete="off"><label for="openrouterModel">ID модели</label><input id="openrouterModel" value="openrouter/free" autocomplete="off"></div>
+<div class="provider"><div class="provider-head"><div><b>Anthropic Claude</b><small>API обычно требует оплачиваемый доступ/кредиты</small></div><a href="https://console.anthropic.com/" target="_blank" rel="noreferrer">Консоль ↗</a></div><label for="anthropicKey">API-ключ</label><input id="anthropicKey" type="password" placeholder="sk-ant-…" autocomplete="off"><label for="anthropicModel">Модель</label><input id="anthropicModel" value="claude-3-5-haiku-latest" autocomplete="off"></div>
+<div class="provider"><div class="provider-head"><div><b>Своя OpenAI-совместимая модель</b><small>Для совместимых API-провайдеров</small></div></div><label for="customBase">Базовый URL</label><input id="customBase" placeholder="https://api.example.com/v1" autocomplete="off"><label for="customKey">API-ключ</label><input id="customKey" type="password" placeholder="Ключ API" autocomplete="off"><label for="customModel">ID модели</label><input id="customModel" placeholder="model-id" autocomplete="off"></div>
+<div class="modal-actions"><button class="secondary-btn" id="clearKeys">Удалить ключи</button><button class="primary-btn" id="saveSettings">Сохранить настройки</button></div><div class="save-status" id="saveStatus" role="status"></div></section></div>
+<script src="app.js"></script>
+</body></html>
